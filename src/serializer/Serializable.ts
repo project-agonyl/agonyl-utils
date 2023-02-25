@@ -1,5 +1,5 @@
 import { MetaData } from './types';
-import { getBytesFromNumberLE, getFixedLengthBytesFromString } from '../functions';
+import { getBytesFromNumberLE, getFixedLengthBytesFromString, getStringFromBuffer } from '../functions';
 import getPropertiesWithMetaData from './getPropertiesWithMetaData';
 
 export default class Serializable {
