@@ -1,0 +1,53 @@
+{
+  "name": "@project-agonyl/agonyl-utils",
+  "version": "1.0.0",
+  "description": "Assorted set of Javascript utilities that can used for developing tools and services for A3 Online",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "npx vitest",
+    "test": "npx vitest run --coverage",
+    "build": "npx tsup src/index.ts --format cjs,esm --dts",
+    "lint": "npx eslint src --ext .ts",
+    "lint:fix": "npx eslint src --ext .ts --fix",
+    "lint:staged": "npx lint-staged",
+    "prepare": "npx husky install",
+    "ci": "npm run lint && npm run test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/project-agonyl/agonyl-utils.git"
+  },
+  "keywords": [],
+  "author": "cyberinferno",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/project-agonyl/agonyl-utils/issues"
+  },
+  "homepage": "https://github.com/project-agonyl/agonyl-utils#readme",
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.46.0",
+    "@typescript-eslint/parser": "^5.46.0",
+    "@vitest/coverage-istanbul": "^0.28.5",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.1.2",
+    "tsup": "^6.6.3",
+    "typescript": "^4.9.4",
+    "vitest": "^0.28.5"
+  },
+  "lint-staged": {
+    "*.ts": "eslint"
+  }
+}
