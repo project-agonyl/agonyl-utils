@@ -1,5 +1,11 @@
 # @project-agonyl/agonyl-utils
 
+## 1.1.1
+
+### Patch Changes
+
+- ec65ab4: Exported `isValidJsonString` function
+
 ## 1.1.0
 
 ### Minor Changes
