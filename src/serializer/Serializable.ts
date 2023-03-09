@@ -29,6 +29,8 @@ export default class Serializable {
         case 'int':
         case 'int32':
           return Buffer.from(getBytesFromNumberLE(value));
+        case 'serializable':
+          return typeof value.serialize === 'function' ? value.serialize() : Buffer.alloc(0);
         default:
           return Buffer.alloc(0);
       }
@@ -79,6 +81,16 @@ export default class Serializable {
           // @ts-ignore
           this[property.name] = buffer.readUInt32LE(offset);
           offset += 4;
+          break;
+        case 'serializable':
+          // @ts-ignore
+          if (typeof this[property.name].deserialize === 'function' && typeof this[property.name].serialize === 'function') {
+            // @ts-ignore
+            this[property.name].deserialize(buffer.subarray(offset));
+            // @ts-ignore
+            offset += this[property.name].serialize().length;
+          }
+
           break;
         default:
           break;

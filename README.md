@@ -22,6 +22,15 @@ Usage:
 ```typescript
     import { Serializable, meta } from '@project-agonyl/agonyl-utils';
 
+    class MySubSerializable extends Serializable {
+        @meta({
+            type: 'string',
+            order: 1,
+            length: 20
+        })
+        public mySubProperty: string = '';
+    }
+
     class MySerializable extends Serializable {
 
         @meta({
@@ -30,17 +39,26 @@ Usage:
            length: 20
         })
         public myProperty: string = '';
+        
+        @meta({
+            type: 'serializable',
+            order: 2,
+            length: 20
+        })
+        public mySubSerializable: MySubSerializable = new MySubSerializable();
     }
 
     // Serialize
     const mySerializable = new MySerializable();
     mySerializable.myProperty = 'Hello World!';
+    mySerializable.mySubSerializable.mySubProperty = 'Hello Sub World!';
     const serialized = mySerializable.serialize();
     
     // Deserialize
     const deserializable = new MySerializable();
     deserializable.deserialize(serialized);
     console.log(deserializable.myProperty); // 'Hello World!'
+    console.log(deserializable.mySubSerializable.mySubProperty); // 'Hello Sub World!'
 ```
 
 Here the meta decorator is used to define the serialization order, type and length of the property.
@@ -56,6 +74,7 @@ The following types are supported:
 - int16
 - int32
 - int64
+- serializable
 
 #### SerializableWithAutoSetSize
 
