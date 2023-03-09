@@ -1,5 +1,11 @@
 # @project-agonyl/agonyl-utils
 
+## 1.2.0
+
+### Minor Changes
+
+- 4b124af: Added serializable type for serializing class properties in a class
+
 ## 1.1.1
 
 ### Patch Changes
