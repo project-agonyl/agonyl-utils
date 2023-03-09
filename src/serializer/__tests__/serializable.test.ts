@@ -2,6 +2,21 @@ import { describe, it, expect } from 'vitest';
 import Serializable from '../Serializable';
 import meta from '../meta';
 
+class SubClass extends Serializable {
+  @meta({
+    order: 1,
+    type: 'string',
+    length: 4,
+  })
+  public subString: string = '';
+
+  @meta({
+    order: 2,
+    type: 'int',
+  })
+  public subInt: number = 0;
+}
+
 class TestClass extends Serializable {
   @meta({
     order: 2,
@@ -42,10 +57,16 @@ class TestClass extends Serializable {
   public testTrue: boolean = false;
 
   @meta({
-    order: 7,
+    order: 8,
     type: 'short',
   })
   public testShort: number = 0;
+
+  @meta({
+    order: 7,
+    type: 'serializable',
+  })
+  public testClass: SubClass = new SubClass();
 }
 
 describe('Serializable Class', () => {
@@ -58,6 +79,8 @@ describe('Serializable Class', () => {
     testClass.testFalse = false;
     testClass.testTrue = true;
     testClass.testShort = 1;
+    testClass.testClass.subInt = 5;
+    testClass.testClass.subString = 'test';
     const serialized = testClass.serialize();
     expect(serialized).toEqual(Buffer.from([
       116, 101, 115, 116,
@@ -66,6 +89,8 @@ describe('Serializable Class', () => {
       1, 0,
       0,
       1,
+      116, 101, 115, 116,
+      5, 0, 0, 0,
       1, 0,
     ]));
   });
@@ -78,6 +103,8 @@ describe('Serializable Class', () => {
       1, 0,
       0,
       1,
+      116, 101, 115, 116,
+      5, 0, 0, 0,
       1, 0,
     ]);
     const testClass = new TestClass();
@@ -89,5 +116,7 @@ describe('Serializable Class', () => {
     expect(testClass.testFalse).toBe(false);
     expect(testClass.testTrue).toBe(true);
     expect(testClass.testShort).toBe(1);
+    expect(testClass.testClass.subInt).toBe(5);
+    expect(testClass.testClass.subString).toMatch('test');
   });
 });

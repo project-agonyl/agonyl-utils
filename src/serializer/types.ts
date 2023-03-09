@@ -8,6 +8,7 @@ const allowedDataTypes = [
   'int16',
   'int32',
   'int64',
+  'serializable',
 ] as const;
 
 export type SerializableDataType = typeof allowedDataTypes[number];
