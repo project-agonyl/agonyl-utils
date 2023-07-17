@@ -1,5 +1,11 @@
 # @project-agonyl/agonyl-utils
 
+## 1.3.0
+
+### Minor Changes
+
+- a6b19d3: Added array support as serializable class property
+
 ## 1.2.0
 
 ### Minor Changes
