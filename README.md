@@ -7,6 +7,16 @@ Install the package using NPM:
 
     npm i @project-agonyl/agonyl-utils
 
+Set `experimentalDecorators` to `true` in your `tsconfig.json` file:
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}
+```
+
 
 ## Documentation
 
@@ -46,12 +56,21 @@ Usage:
             length: 20
         })
         public mySubSerializable: MySubSerializable = new MySubSerializable();
+
+        @meta({
+            type: 'byte',
+            order: 3,
+            isArray: true,
+            arraySize: 2,
+        })
+        public myByteArray: number[] = [];
     }
 
     // Serialize
     const mySerializable = new MySerializable();
     mySerializable.myProperty = 'Hello World!';
     mySerializable.mySubSerializable.mySubProperty = 'Hello Sub World!';
+    mySerializable.myByteArray = [0x01, 0x02];
     const serialized = mySerializable.serialize();
     
     // Deserialize
@@ -59,6 +78,7 @@ Usage:
     deserializable.deserialize(serialized);
     console.log(deserializable.myProperty); // 'Hello World!'
     console.log(deserializable.mySubSerializable.mySubProperty); // 'Hello Sub World!'
+    console.log(deserializable.myByteArray); // [0x01, 0x02]
 ```
 
 Here the meta decorator is used to define the serialization order, type and length of the property.
@@ -75,6 +95,9 @@ The following types are supported:
 - int32
 - int64
 - serializable
+
+Arrays are now supported as a serializable class property by setting `isArray` and `arraySize` meta properties
+(except for serializable type).
 
 #### SerializableWithAutoSetSize
 
