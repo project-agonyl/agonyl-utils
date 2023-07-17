@@ -67,6 +67,14 @@ class TestClass extends Serializable {
     type: 'serializable',
   })
   public testClass: SubClass = new SubClass();
+
+  @meta({
+    order: 8,
+    type: 'short',
+    isArray: true,
+    arraySize: 5,
+  })
+  public testArrayShort: number[] = [];
 }
 
 describe('Serializable Class', () => {
@@ -81,6 +89,7 @@ describe('Serializable Class', () => {
     testClass.testShort = 1;
     testClass.testClass.subInt = 5;
     testClass.testClass.subString = 'test';
+    testClass.testArrayShort = [1, 2, 3, 4, 5];
     const serialized = testClass.serialize();
     expect(serialized).toEqual(Buffer.from([
       116, 101, 115, 116,
@@ -92,6 +101,7 @@ describe('Serializable Class', () => {
       116, 101, 115, 116,
       5, 0, 0, 0,
       1, 0,
+      1, 0, 2, 0, 3, 0, 4, 0, 5, 0,
     ]));
   });
 
@@ -106,6 +116,7 @@ describe('Serializable Class', () => {
       116, 101, 115, 116,
       5, 0, 0, 0,
       1, 0,
+      1, 0, 2, 0, 3, 0, 4, 0, 5, 0,
     ]);
     const testClass = new TestClass();
     testClass.deserialize(buffer);
@@ -118,5 +129,6 @@ describe('Serializable Class', () => {
     expect(testClass.testShort).toBe(1);
     expect(testClass.testClass.subInt).toBe(5);
     expect(testClass.testClass.subString).toMatch('test');
+    expect(testClass.testArrayShort).toEqual([1, 2, 3, 4, 5]);
   });
 });

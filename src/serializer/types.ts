@@ -17,4 +17,12 @@ export type MetaData = {
   order: number;
   type: SerializableDataType;
   length?: number;
+  isArray?: never;
+  arraySize?: never;
+} | {
+  order: number;
+  type: SerializableDataType;
+  length?: number;
+  isArray: boolean;
+  arraySize: number;
 };
