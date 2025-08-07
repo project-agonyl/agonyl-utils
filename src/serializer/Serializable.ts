@@ -80,6 +80,7 @@ export default class Serializable {
             offset += 1;
             break;
           case 'byte':
+          case 'int8':
             if (isArray) {
               // @ts-ignore
               this[property.name].push(buffer[offset]);
@@ -140,6 +141,7 @@ export default class Serializable {
       case 'boolean':
         return Buffer.from(getBytesFromNumberLE(value ? 1 : 0, 1));
       case 'byte':
+      case 'int8':
         return Buffer.from(getBytesFromNumberLE(value, 1));
       case 'short':
       case 'int16':
