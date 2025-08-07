@@ -91,6 +91,7 @@ The following types are supported:
 - byte
 - short
 - int
+- int8
 - int16
 - int32
 - int64
