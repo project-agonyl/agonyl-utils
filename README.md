@@ -79,6 +79,15 @@ Usage:
     console.log(deserializable.myProperty); // 'Hello World!'
     console.log(deserializable.mySubSerializable.mySubProperty); // 'Hello Sub World!'
     console.log(deserializable.myByteArray); // [0x01, 0x02]
+
+    // Convert to JSON array (preserves ordering)
+    const jsonArray = mySerializable.toJson();
+    console.log(JSON.stringify(jsonArray, null, 2));
+    
+    // Load from JSON array
+    const loadedSerializable = new MySerializable();
+    loadedSerializable.fromJson(jsonArray);
+    console.log(loadedSerializable.myProperty); // 'Hello World!'
 ```
 
 Here the meta decorator is used to define the serialization order, type and length of the property.
@@ -91,6 +100,7 @@ The following types are supported:
 - byte
 - short
 - int
+- int8
 - int16
 - int32
 - int64
@@ -98,6 +108,21 @@ The following types are supported:
 
 Arrays are now supported as a serializable class property by setting `isArray` and `arraySize` meta properties
 (except for serializable type).
+
+#### JSON Methods
+
+The Serializable class also provides JSON conversion methods for text-based storage:
+
+**`toJson()`**: Converts the serializable data into a JSON array format that preserves the ordering of properties based on their metadata order. Each array element contains:
+- `name`: Property name
+- `type`: Data type
+- `value`: Current value (for serializable types, this is the nested JSON array)
+- `order`: Metadata order
+- `isArray`: Whether the property is an array
+- `arraySize`: Array size (if applicable)
+- `length`: Field length (if applicable)
+
+**`fromJson(jsonArray)`**: Loads data from a JSON array back into the class instance. Handles nested serializable objects by recursively calling `fromJson()` on them.
 
 #### SerializableWithAutoSetSize
 

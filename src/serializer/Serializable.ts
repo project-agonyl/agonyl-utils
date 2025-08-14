@@ -25,6 +25,61 @@ export default class Serializable {
     return Buffer.concat(buffers);
   }
 
+  public toJson() {
+    const properties = getPropertiesWithMetaData(this);
+    const jsonArray = properties.map((property: { name: string, meta: MetaData }) => {
+      // @ts-ignore
+      const value = this[property.name];
+
+      let processedValue = value;
+      if (property.meta.type === 'serializable' && value && typeof value.toJson === 'function') {
+        processedValue = value.toJson();
+      }
+
+      return {
+        name: property.name,
+        type: property.meta.type,
+        value: processedValue,
+        order: property.meta.order,
+        isArray: property.meta.isArray || false,
+        arraySize: property.meta.arraySize || 1,
+        length: property.meta.length || 1,
+      };
+    });
+
+    return jsonArray;
+  }
+
+  public fromJson(jsonArray: Array<{
+    name: string;
+    type: SerializableDataType;
+    value: any;
+    order: number;
+    isArray: boolean;
+    arraySize: number;
+    length: number;
+  }>) {
+    jsonArray.forEach((item) => {
+      // @ts-ignore
+      if (Object.prototype.hasOwnProperty.call(this, item.name)) {
+        const processedValue = item.value;
+
+        if (item.type === 'serializable' && item.value && Array.isArray(item.value)) {
+          // Reconstruct nested serializable object
+          const propertyMeta = Reflect.getMetadata('meta', this, item.name);
+          if (propertyMeta && typeof (this as any)[item.name]?.fromJson === 'function') {
+            // @ts-ignore
+            (this as any)[item.name].fromJson(item.value);
+            return;
+          }
+        }
+
+        // @ts-ignore
+        this[item.name] = processedValue;
+      }
+    });
+  }
+
   public deserialize(buffer: Buffer) {
     const properties = getPropertiesWithMetaData(this);
     let offset = 0;
@@ -80,6 +135,7 @@ export default class Serializable {
             offset += 1;
             break;
           case 'byte':
+          case 'int8':
             if (isArray) {
               // @ts-ignore
               this[property.name].push(buffer[offset]);
@@ -140,6 +196,7 @@ export default class Serializable {
       case 'boolean':
         return Buffer.from(getBytesFromNumberLE(value ? 1 : 0, 1));
       case 'byte':
+      case 'int8':
         return Buffer.from(getBytesFromNumberLE(value, 1));
       case 'short':
       case 'int16':
