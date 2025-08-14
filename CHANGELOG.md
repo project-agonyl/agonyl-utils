@@ -1,5 +1,15 @@
 # @project-agonyl/agonyl-utils
 
+## 1.4.0
+
+### Minor Changes
+
+- a540b7f: - Added JSON serialization methods to Serializable class
+  - `toJson()`: Converts serializable data to JSON array format with preserved ordering
+  - `fromJson()`: Loads data from JSON array back into class instance
+  - Supports nested serializable objects with recursive conversion
+  - Maintains complete metadata structure for round-trip serialization
+
 ## 1.3.0
 
 ### Minor Changes
